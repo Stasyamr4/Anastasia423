@@ -128,7 +128,7 @@ class Program
                        
                         break;
                     case 6:
-                        PrintProduct();
+                        
                         break;
                     case 7:
                         return;
