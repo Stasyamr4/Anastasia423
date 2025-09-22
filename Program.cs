@@ -89,9 +89,71 @@ class Program
                         break;
                     }
             }
+        }
+        
+        static List<Product> products = new List<Product>();
 
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("\n=== МЕНЮ ===");
+                Console.WriteLine("1. Добавить товар");
+                Console.WriteLine("2. Удалить товар");
+                Console.WriteLine("3. Заказать поставку товара");
+                Console.WriteLine("4. Продать товар");
+                Console.WriteLine("5. Поиск товаров");
+                Console.WriteLine("6. Показать все товары");
+                Console.WriteLine("7. Выход");
+                Console.Write("Выберите действие: ");
 
+                int choice = Convert.ToInt32(Console.ReadLine());
+                
 
+                switch (choice)
+                {
+                    case 1:
+                        AddProduct();
+                        break;
+                    case 2:
+                        RemoveProduct();
+                        break;
+                    case 3:
+                        
+                        break;
+                    case 4:
+                       
+                        break;
+                    case 5:
+                       
+                        break;
+                    case 6:
+                        PrintProduct();
+                        break;
+                    case 7:
+                        return;
+                    default:
+                        Console.WriteLine("Неверный выбор!");
+                        break;
+                }
+            }
+        }
+
+        // Добавить товар
+        static void AddProduct()
+        {
+            Product newProduct = new Product();
+            newProduct.GetProduct();
+            products.Add(newProduct);
+            Console.WriteLine("Товар успешно добавлен!");
+        }
+        static void RemoveProduct()
+        {
+            Console.Write("Введите ID товара для удаления: ");
+        }
+        public void PrintProduct(Product P)
+        {
+            Console.WriteLine($"id - {P.id}, название - {P.name}, цена - {P.price}, количество -  {P.countProd}, остатки -  {P.isprod}");
         }
     }
 }
