@@ -133,7 +133,7 @@ class Program
                         AddProduct();
                         break;
                     case 2:
-                        Console.WriteLine("Функция в разработке");
+                        DeleteProduct();
                         break;
                     case 3:
                         Console.WriteLine("Функция в разработке");
@@ -169,6 +169,56 @@ class Program
         products.Add(newProduct);
         Console.WriteLine("\nТовар успешно добавлен!");
         newProduct.PrintProduct();
+    }
+    static void DeleteProduct()
+    {
+       
+        if (products.Count == 0)
+        {
+            Console.WriteLine("Список товаров пуст! Нечего удалять.");
+            return;
+        }
+
+        
+        Console.WriteLine("\n=== СПИСОК ТОВАРОВ ===");
+        ShowAllProducts();
+
+        
+        Console.Write("\nВведите ID товара для удаления: ");
+
+        try
+        {
+            int idToDelete = Convert.ToInt32(Console.ReadLine());
+
+            
+            Product productToDelete = products.Find(p => p.id == idToDelete);
+
+            if (productToDelete != null)  
+            {
+               
+                Console.WriteLine($"Вы действительно хотите удалить товар: {productToDelete.name}?");
+                Console.Write("Введите 'да' для подтверждения: ");
+                string confirmation = Console.ReadLine();
+
+                if (confirmation.ToLower() == "да")
+                {
+                    products.Remove(productToDelete); 
+                    Console.WriteLine($"Товар '{productToDelete.name}' успешно удален!");
+                }
+                else
+                {
+                    Console.WriteLine("Удаление отменено.");
+                }
+            }
+            else  
+            {
+                Console.WriteLine($"Товар с ID {idToDelete} не найден!");
+            }
+        }
+        catch (FormatException)  
+        {
+            Console.WriteLine("Ошибка! Нужно ввести число (ID товара).");
+        }
     }
 
     static void ShowAllProducts()
