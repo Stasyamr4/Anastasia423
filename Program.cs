@@ -51,7 +51,7 @@ class Program
                 }
             }
             Console.WriteLine($"Самое короткое слово: '{shortestWord}' (длина: {shortestWord.Length})");
-            return words.Length;
+            return words.Length; 
         }
 
             static int CountSentences(string text)
