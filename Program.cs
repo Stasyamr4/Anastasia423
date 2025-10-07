@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Runtime.CompilerServices;
 
 class Program
@@ -32,6 +33,9 @@ class Program
 
             int sentenceCount = CountSentences(text);
             Console.WriteLine($"Количество предложений: {sentenceCount}");
+
+            Сountbukvi(text, out int count1, out int count2);
+            Console.WriteLine($"кол-во гласных - {count1}, кол-во согласных - {count2}");
         }
 
         static int Words(string text)
@@ -65,7 +69,33 @@ class Program
                 return count;
             }
 
+            static void Сountbukvi(string text, out int count1, out int count2)
+            {
+            count1 = 0;
+            count2 = 0;
+            string glasnie = "аеёиоуыэюя";
+            string soglasnie = "бвгджзйклмнпрстфхцчшщ";
+
+
+            for (int i = 0; i< text.Length;i++)
+            {
+                char current = char.ToLower(text[i]);//нижний регистр
+
+                if (glasnie.IndexOf(current) >= 0)
+                {
+                    count1++;
+                }
+                
+                else if (soglasnie.IndexOf(current) >= 0)
+                {
+                    count2++;
+                }
+                
+            }
+            Console.WriteLine ($"{count1}, {count2}");    
+            }
         }
+        
     
 }
 
