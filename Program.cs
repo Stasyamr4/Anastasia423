@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 class Program
@@ -19,6 +20,7 @@ class Program
                 if (text.Length < 100)
                 {
                     Console.WriteLine("\nВведите текст не менее 100 символов\n");
+                    break;
                 }
 
             }
@@ -34,11 +36,14 @@ class Program
             int sentenceCount = CountSentences(text);
             Console.WriteLine($"Количество предложений: {sentenceCount}");
 
-            Сountbukvi(text, out int count1, out int count2);
-            Console.WriteLine($"кол-во гласных - {count1}, кол-во согласных - {count2}");
+            (int countsogl, int countglasn) = Сountbukvi(text);
+            Console.WriteLine($"кол-во гласных - {countglasn}, кол-во согласных - {countsogl}");
 
             int Long = CountLongWord(text);
             Console.WriteLine($"самое длинное слово: {Long}");
+
+            Dictionary<char, int> frequency = CountLetterFrequency(text);
+            DisplayFrequency(frequency);
         }
 
         static int Words(string text)
@@ -72,10 +77,10 @@ class Program
                 return count;
             }
 
-            static void Сountbukvi(string text, out int count1, out int count2)
+            static (int countgl, int countsogl) Сountbukvi(string text)
             {
-            count1 = 0;
-            count2 = 0;
+            int count1 = 0;
+            int count2 = 0;
             string glasnie = "аеёиоуыэюя";
             string soglasnie = "бвгджзйклмнпрстфхцчшщ";
 
@@ -88,14 +93,14 @@ class Program
                 {
                     count1++;
                 }
-                
                 else if (soglasnie.IndexOf(current) >= 0)
                 {
                     count2++;
                 }
                 
             }
-            Console.WriteLine ($"гласные - {count1}, согласные - {count2}");    
+            Console.WriteLine ($"гласные - {count1}, согласные - {count2}"); 
+            return (count1, count2);
             }
         }
     static int CountLongWord(string text)
@@ -121,5 +126,41 @@ class Program
 
 
     }
+    static Dictionary<char, int> CountLetterFrequency(string text)
+    {
+        Dictionary<char, int> frequency = new Dictionary<char, int>();
+        for (int i = 0; i < text.Length; i++)
+        {
+            char currentChar = char.ToLower(text[i]); 
+            if ((currentChar >= 'а' && currentChar <= 'я') || currentChar == 'ё')
+            {
+                if (frequency.ContainsKey(currentChar))
+                {
+                    frequency[currentChar]++;
+                }
+                else
+                {
+                    frequency[currentChar] = 1;
+                }
+            }
+        }
+
+        return frequency;
+    }
+
+    static void DisplayFrequency(Dictionary<char, int> frequency)
+    {
+        Console.WriteLine("Статистика по частоте букв:");
+        string alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+        for (int i = 0; i < alphabet.Length; i++)
+        {
+            char letter = alphabet[i];
+            if (frequency.ContainsKey(letter))
+            {
+                Console.WriteLine($"Буква '{letter}': {frequency[letter]} раз");
+            }
+        }
+    }
+
 }
 
