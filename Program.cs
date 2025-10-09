@@ -36,6 +36,9 @@ class Program
 
             Сountbukvi(text, out int count1, out int count2);
             Console.WriteLine($"кол-во гласных - {count1}, кол-во согласных - {count2}");
+
+            int Long = CountLongWord(text);
+            Console.WriteLine($"самое длинное слово: {Long}");
         }
 
         static int Words(string text)
@@ -92,10 +95,31 @@ class Program
                 }
                 
             }
-            Console.WriteLine ($"{count1}, {count2}");    
+            Console.WriteLine ($"гласные - {count1}, согласные - {count2}");    
             }
         }
-        
-    
+    static int CountLongWord(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return 0;
+        }
+        string[] Long = text.Split(new[] { ' ', '\t', '\n', '\r' },
+            StringSplitOptions.RemoveEmptyEntries);
+        string longword = Long[0];
+        for (int i = 1; i < Long.Length; i++)
+        {
+            if (Long[i].Length > longword.Length)
+            {
+                longword = Long[i];
+            }
+        }
+        Console.WriteLine($"самое длинное слово - {longword} (длина - {longword.Length})");
+        return longword.Length;
+
+
+
+
+    }
 }
 
