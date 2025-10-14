@@ -47,7 +47,7 @@ public class Library
             Price = price
         };
         books.Add(book);
-        Console.WriteLine($"\n✓ Книга успешно добавлена! ID: {book.Id}");
+        Console.WriteLine($"\n Книга успешно добавлена! ID: {book.Id}");
     }
 
     public bool RemoveBook(int id)
@@ -56,10 +56,10 @@ public class Library
         if (book != null)
         {
             books.Remove(book);
-            Console.WriteLine($"\n✓ Книга с ID {id} успешно удалена.");
+            Console.WriteLine($"\n Книга с ID {id} успешно удалена.");
             return true;
         }
-        Console.WriteLine($"\n✗ Книга с ID {id} не найдена.");
+        Console.WriteLine($"\n Книга с ID {id} не найдена.");
         return false;
     }
 
@@ -155,3 +155,125 @@ public class Library
     public bool BookExists(int id) => books.Any(b => b.Id == id);
     public bool HasBooks() => books.Any();
 }
+class Program
+{
+    static Library library = new Library();
+
+    static void Main()
+    {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+        // Добавляем тестовые данные
+        library.AddTestData();
+
+        ShowMainMenu();
+    }
+
+    static void ShowMainMenu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("=== БИБЛИОТЕКА КНИГ ===");
+            Console.WriteLine("1. Показать все книги");
+            Console.WriteLine("2. Добавить книгу");
+            Console.WriteLine("3. Удалить книгу");
+            Console.WriteLine("4. Найти книгу");
+            Console.WriteLine("5. Сортировать книги");
+            Console.WriteLine("6. Самая дорогая/дешевая книга");
+            Console.WriteLine("7. Статистика по авторам");
+            Console.WriteLine("0. Выход");
+            Console.Write("Выберите действие: ");
+            var choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1": ShowAllBooks(); break;
+                case "2": AddBookMenu(); break;
+                case "3": RemoveBookMenu(); break;
+                case "4": FindBookMenu(); break;
+                case "5": SortBooksMenu(); break;
+                case "6": ShowPriceExtremes(); break;
+                case "7": ShowAuthorStats(); break;
+                case "0": return;
+                default: ShowError("Неверный выбор!"); break;
+            }
+        }
+    }
+    static void ShowAllBooks()
+    {
+        Console.Clear();
+        library.DisplayAllBooks();
+        WaitForUser();
+    }
+
+    static void AddBookMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("=== ДОБАВЛЕНИЕ НОВОЙ КНИГИ ===");
+
+        string title = GetValidatedInput("Введите название книги: ",
+            input => !string.IsNullOrWhiteSpace(input), "Название не может быть пустым!");
+
+        string author = GetValidatedInput("Введите автора книги: ",
+            input => !string.IsNullOrWhiteSpace(input), "Автор не может быть пустым!");
+
+        Genre genre = GetGenreFromUser();
+        int year = GetValidatedYear();
+        decimal price = GetValidatedPrice();
+
+        library.AddBook(title, author, genre, year, price);
+        WaitForUser();
+    }
+
+    static void RemoveBookMenu()
+    {
+        Console.Clear();
+        if (!library.HasBooks())
+        {
+            ShowError("В библиотеке нет книг для удаления!");
+            return;
+        }
+
+        library.DisplayAllBooks();
+        Console.Write("\nВведите ID книги для удаления: ");
+
+        if (int.TryParse(Console.ReadLine(), out int id))
+        {
+            library.RemoveBook(id);
+        }
+        else
+        {
+            ShowError("Неверный формат ID!");
+        }
+        WaitForUser();
+    }
+    static void FindBookMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("=== ПОИСК КНИГ ===");
+        Console.WriteLine("1. По названию");
+        Console.WriteLine("2. По автору");
+        Console.WriteLine("3. По жанру");
+        Console.Write("Выберите тип поиска: ");
+
+        var choice = Console.ReadLine();
+        switch (choice)
+        {
+            case "1":
+                Console.Write("Введите название для поиска: ");
+                library.FindBooksByTitle(Console.ReadLine());
+                break;
+            case "2":
+                Console.Write("Введите автора для поиска: ");
+                library.FindBooksByAuthor(Console.ReadLine());
+                break;
+            case "3":
+                Genre genre = GetGenreFromUser();
+                library.FindBooksByGenre(genre);
+                break;
+            default:
+                ShowError("Неверный выбор!");
+                break;
+        }
+        WaitForUser();
+    }
