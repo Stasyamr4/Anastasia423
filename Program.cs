@@ -32,6 +32,7 @@ public class Book
         return $"ID: {Id} | Название: {Title} | Автор: {Author} | Жанр: {Genre} | Год: {Year} | Цена: {Price:F2} руб.";
     }
 }
+
 public class Library
 {
     private List<Book> books = new List<Book>();
@@ -47,7 +48,7 @@ public class Library
             Price = price
         };
         books.Add(book);
-        Console.WriteLine($"\n Книга успешно добавлена! ID: {book.Id}");
+        Console.WriteLine($"\nКнига успешно добавлена! ID: {book.Id}");
     }
 
     public bool RemoveBook(int id)
@@ -56,22 +57,22 @@ public class Library
         if (book != null)
         {
             books.Remove(book);
-            Console.WriteLine($"\n Книга с ID {id} успешно удалена.");
+            Console.WriteLine($"\nКнига с ID {id} успешно удалена.");
             return true;
         }
-        Console.WriteLine($"\n Книга с ID {id} не найдена.");
+        Console.WriteLine($"\nКнига с ID {id} не найдена.");
         return false;
     }
 
     public void FindBooksByTitle(string title)
     {
-        var foundBooks = books.Where(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList();
+        var foundBooks = books.Where(b => b.Title.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
         DisplayBooks("Найденные книги по названию:", foundBooks);
     }
 
     public void FindBooksByAuthor(string author)
     {
-        var foundBooks = books.Where(b => b.Author.Contains(author, StringComparison.OrdinalIgnoreCase)).ToList();
+        var foundBooks = books.Where(b => b.Author.IndexOf(author, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
         DisplayBooks("Найденные книги по автору:", foundBooks);
     }
 
@@ -155,6 +156,7 @@ public class Library
     public bool BookExists(int id) => books.Any(b => b.Id == id);
     public bool HasBooks() => books.Any();
 }
+
 class Program
 {
     static Library library = new Library();
@@ -163,9 +165,7 @@ class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        // Добавляем тестовые данные
         library.AddTestData();
-
         ShowMainMenu();
     }
 
@@ -184,6 +184,7 @@ class Program
             Console.WriteLine("7. Статистика по авторам");
             Console.WriteLine("0. Выход");
             Console.Write("Выберите действие: ");
+
             var choice = Console.ReadLine();
             switch (choice)
             {
@@ -199,6 +200,7 @@ class Program
             }
         }
     }
+
     static void ShowAllBooks()
     {
         Console.Clear();
@@ -211,10 +213,10 @@ class Program
         Console.Clear();
         Console.WriteLine("=== ДОБАВЛЕНИЕ НОВОЙ КНИГИ ===");
 
-        string title = GetValidatedInput("Введите название книги: ",
+        string title = GetValidatedInput<string>("Введите название книги: ",
             input => !string.IsNullOrWhiteSpace(input), "Название не может быть пустым!");
 
-        string author = GetValidatedInput("Введите автора книги: ",
+        string author = GetValidatedInput<string>("Введите автора книги: ",
             input => !string.IsNullOrWhiteSpace(input), "Автор не может быть пустым!");
 
         Genre genre = GetGenreFromUser();
@@ -247,6 +249,7 @@ class Program
         }
         WaitForUser();
     }
+
     static void FindBookMenu()
     {
         Console.Clear();
@@ -277,6 +280,7 @@ class Program
         }
         WaitForUser();
     }
+
     static void SortBooksMenu()
     {
         Console.Clear();
@@ -331,14 +335,14 @@ class Program
 
     static int GetValidatedYear()
     {
-        return GetValidatedInput("Введите год издания: ",
+        return GetValidatedInput<int>("Введите год издания: ",
             input => int.TryParse(input, out int year) && year > 0 && year <= DateTime.Now.Year,
             $"Год должен быть положительным числом не больше {DateTime.Now.Year}!");
     }
 
     static decimal GetValidatedPrice()
     {
-        return GetValidatedInput("Введите цену книги: ",
+        return GetValidatedInput<decimal>("Введите цену книги: ",
             input => decimal.TryParse(input, out decimal price) && price >= 0,
             "Цена должна быть неотрицательным числом!");
     }
@@ -352,8 +356,23 @@ class Program
 
             if (validator(input))
             {
-                return (T)Convert.ChangeType(input, typeof(T));
+                if (typeof(T) == typeof(string))
+                    return (T)(object)input;
+                else
+                    return (T)Convert.ChangeType(input, typeof(T));
             }
             ShowError(errorMessage);
         }
     }
+
+    static void ShowError(string message)
+    {
+        Console.WriteLine($"\n Ошибка: {message}");
+    }
+
+    static void WaitForUser()
+    {
+        Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+        Console.ReadKey();
+    }
+}
