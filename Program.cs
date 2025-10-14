@@ -277,3 +277,83 @@ class Program
         }
         WaitForUser();
     }
+    static void SortBooksMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("=== СОРТИРОВКА КНИГ ===");
+        Console.WriteLine("1. По названию");
+        Console.WriteLine("2. По году издания");
+        Console.Write("Выберите тип сортировки: ");
+
+        var choice = Console.ReadLine();
+        switch (choice)
+        {
+            case "1": library.SortByTitle(); break;
+            case "2": library.SortByYear(); break;
+            default: ShowError("Неверный выбор!"); break;
+        }
+        WaitForUser();
+    }
+
+    static void ShowPriceExtremes()
+    {
+        Console.Clear();
+        library.ShowMostExpensiveAndCheapest();
+        WaitForUser();
+    }
+
+    static void ShowAuthorStats()
+    {
+        Console.Clear();
+        library.GroupByAuthor();
+        WaitForUser();
+    }
+
+    static Genre GetGenreFromUser()
+    {
+        while (true)
+        {
+            Console.WriteLine("\nВыберите жанр:");
+            foreach (var genre in Enum.GetValues(typeof(Genre)))
+            {
+                Console.WriteLine($"{(int)genre}. {genre}");
+            }
+            Console.Write("Введите номер жанра: ");
+
+            if (int.TryParse(Console.ReadLine(), out int genreNumber) &&
+                Enum.IsDefined(typeof(Genre), genreNumber))
+            {
+                return (Genre)genreNumber;
+            }
+            ShowError("Неверный номер жанра! Попробуйте снова.");
+        }
+    }
+
+    static int GetValidatedYear()
+    {
+        return GetValidatedInput("Введите год издания: ",
+            input => int.TryParse(input, out int year) && year > 0 && year <= DateTime.Now.Year,
+            $"Год должен быть положительным числом не больше {DateTime.Now.Year}!");
+    }
+
+    static decimal GetValidatedPrice()
+    {
+        return GetValidatedInput("Введите цену книги: ",
+            input => decimal.TryParse(input, out decimal price) && price >= 0,
+            "Цена должна быть неотрицательным числом!");
+    }
+
+    static T GetValidatedInput<T>(string prompt, Func<string, bool> validator, string errorMessage)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            string input = Console.ReadLine();
+
+            if (validator(input))
+            {
+                return (T)Convert.ChangeType(input, typeof(T));
+            }
+            ShowError(errorMessage);
+        }
+    }
