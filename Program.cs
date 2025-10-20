@@ -68,5 +68,18 @@ class Teacher : Person
         Console.WriteLine($"Предмет: {Subject}\nТелефон: {Telephone}\nГород: {City}");
     }
 }
+class Cource : Person
+{
+    private int Id;
+    private string Name;
+    private string Teacher;
+
+    public Cource(string fio, DateOnly birthday, string gender, int id,  string name, string teacher)
+        : base(fio, birthday, gender)
+    {
+        Id = id;
+        Name = name; 
+        Teacher = teacher;
+    }
 }
 
