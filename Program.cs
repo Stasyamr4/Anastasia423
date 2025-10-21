@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 class Person
 {
-    private String FIO;
+    public String FIO;
     private DateOnly Birthday;
     private string Gender;
     public Person(string fio, DateOnly birthday, string gender)
@@ -21,25 +22,25 @@ class Student : Person
     public int id = 0;
     static public int NextID = 1;
     private int StudentNumberID;
-    private int CourseNumber;
     private string Telephone;
+    public List<Cource> cources;
     private string City;
 
     public Student(string fio, DateOnly birthday, string gender,
-                   int studentNumberId, int courseNumber, string telephone, string city)
+                   int studentNumberId, string telephone, string city)
                    : base(fio, birthday, gender)
     {
         id = NextID++;
         StudentNumberID = studentNumberId;
-        CourseNumber = courseNumber;
         Telephone = telephone;
         City = city;
+        cources = new List<Cource>();
     }
     public override void Print()
     {
         Console.WriteLine("Студент");
         base.Print();
-        Console.WriteLine($"Студент ID: {StudentNumberID}\nКурс: {CourseNumber}\nТелефон: {Telephone}\nГород: {City}");
+        Console.WriteLine($"Студент ID: {StudentNumberID}\nТелефон: {Telephone}\nГород: {City}");
     }
 }
 class Teacher : Person
@@ -71,8 +72,8 @@ class Cource
 {
     public int id = 0;
     static public int NextID = 1;
-    private string Name;
-    private int Hours;
+    public string Name;
+    public int Hours;
 
     public Cource(string name, int hours)
     {
@@ -143,8 +144,8 @@ class Program
     static void AddStudent()
     {
 
-        students.Add(new Student("Иванов Иван Иванович", new DateOnly(2000, 5, 15), "М", 244878, 3, "+79991112233", "Москва"));
-        students.Add(new Student("Петрова Анна Сергеевна", new DateOnly(2001, 8, 22), "Ж", 237856, 1, "+79992223344", "Санкт-Петербург"));
+        students.Add(new Student("Иванов Иван Иванович", new DateOnly(2000, 5, 15), "М", 244878, "+79991112233", "Москва"));
+        students.Add(new Student("Петрова Анна Сергеевна", new DateOnly(2001, 8, 22), "Ж", 237856, "+79992223344", "Санкт-Петербург"));
     }
     static void AddTeacher()
     {
@@ -155,7 +156,14 @@ class Program
     {
         cources.Add(new Cource("Высшая математика", 30));
         cources.Add(new Cource("Общая физика", 20));
+        cources.Add(new Cource("Русский язык", 20));
+        cources.Add(new Cource("Английский язык", 20));
+        cources.Add(new Cource("Испанский язык", 20));
+        cources.Add(new Cource("Литература и писатели", 20));
+        cources.Add(new Cource("Изо", 20));
     }
+
+
     static void ShowStudent()
     {
         Console.Clear();
@@ -173,6 +181,131 @@ class Program
             Console.WriteLine("");
         }
     }
+    static void ShowTeacher()
+    {
+        if (students.Count == 0)
+        {
+            Console.WriteLine("Учителей нет");
+            return;
+        }
 
-    
+        foreach (var teacher in teachers)
+        {
+            teacher.Print();
+            Console.WriteLine("");
+        }
+    }
+    static void ShowCource()
+    {
+        if (students.Count == 0)
+        {
+            Console.WriteLine("Курсов нет");
+            return;
+        }
+
+        foreach (var cource in cources)
+        {
+            cource.Print();
+            Console.WriteLine("");
+        }
+    }
+    static void RegisterStudent()
+    {
+        Console.Clear();
+        Console.WriteLine("ЗАПИСЬ СТУДЕНТА НА КУРС");
+
+        if (students.Count == 0)
+        {
+            Console.WriteLine("Ошибка: нет студентов!");
+            return;
+        }
+
+        if (cources.Count == 0)
+        {
+            Console.WriteLine("Ошибка: нет курсов!");
+            return;
+        }
+
+        // Показываем всех студентов
+        Console.WriteLine("\nСписок студентов:");
+        foreach (var student in students)
+        {
+            Console.WriteLine($"{student.id}. {student.FIO}");
+        }
+
+        // Выбираем студента
+        Console.Write("\nВведите ID студента: ");
+        if (!int.TryParse(Console.ReadLine(), out int studentId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
+
+        // Ищем студента через LINQ
+        Student serchSt = students.FirstOrDefault(s => s.id == studentId);
+        if (serchSt == null)
+        {
+            Console.WriteLine("Ошибка: студент не найден!");
+            return;
+        }
+
+        // Показываем курсы этого студента
+        Console.WriteLine($"\nТекущие курсы студента {serchSt.FIO}:");
+        if (serchSt.cources.Count == 0)
+        {
+            Console.WriteLine("Нет записанных курсов");
+        }
+        else
+        {
+            foreach (var cource in serchSt.cources)
+            {
+                cource.Print();
+                Console.WriteLine("");
+            }
+        }
+
+        // Показываем все доступные курсы
+        Console.WriteLine("\nВсе доступные курсы:");
+        foreach (var cource in cources)
+        {
+            // Показываем только те курсы, на которые студент еще не записан
+            if (!serchSt.cources.Any(c => c.id == cource.id))
+            {
+                Console.WriteLine($"{cource.id}. {cource.Name}");
+            }
+        }
+
+        // Выбираем курс для записи
+        Console.Write("\nВведите ID курса для записи: ");
+        if (!int.TryParse(Console.ReadLine(), out int courceId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
+
+        // Ищем курс через LINQ
+        Cource selectedCource = cources.FirstOrDefault(c => c.id == courceId);
+        if (selectedCource == null)
+        {
+            Console.WriteLine("Ошибка: курс не найден!");
+            return;
+        }
+
+        // Проверяем, не записан ли уже студент на этот курс
+        if (serchSt.cources.Any(c => c.id == courceId))
+        {
+            Console.WriteLine($"ОШИБКА: Студент уже записан на курс '{selectedCource.Name}'!");
+            return;
+        }
+
+        // Записываем студента на курс
+        serchSt.AddCource(selectedCource);
+    }
+
+
+
+
+}
+
+
 }
