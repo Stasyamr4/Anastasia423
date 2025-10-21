@@ -21,7 +21,36 @@ class Program
             Console.WriteLine("8. Записаться на курс (учитель)");
             Console.WriteLine("9. Показать курсы студента");
             Console.WriteLine("10. Показать курсы учителя");
+            Console.WriteLine("0. Выход");
+
+            var choice = Console.ReadLine();
+            switch (choice)
+            {
+                Console.Clear();
+                case "1": AddStudent(); break;
+                case "2": AddTeacher(); break;
+                case "3": AddCource(); break;
+                case "4": ShowStudent(); break;
+                case "5": ShowTeacher(); break;
+                case "6": ShowCource(); break;
+                case "7": RegisterStudent(); break;
+                case "8": RegisterTeacher(); break;
+                case "9": ShowCourceStudent(); break;
+                case "10": ShowCourceTeacher(); break;
+                case "0": return;
+                default: ShowError("Неверный выбор!"); break;
+            }   
+                if (choice != "0")
+                  {
+                        Console.WriteLine("\nНажмите любую клавишу для продолжения");
+                        Console.ReadKey();
+                  }
+            
         }
+    }
+    static void AddStudent()
+    {
+
     }
 }
 class Person
