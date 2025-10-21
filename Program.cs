@@ -96,7 +96,7 @@ class Program
 
     static void Main()
     {
-       
+        ShowMenu();
     }
     static void ShowMenu()
     {
@@ -130,7 +130,7 @@ class Program
                 case "9": ShowCourceStudent(); break;
                 case "10": ShowCourceTeacher(); break;
                 case "0": return;
-                default: ShowError("Неверный выбор!"); break;
+                default: Console.WriteLine("Неверный выбор!"); break;
             }   
                 if (choice != "0")
                   {
@@ -158,7 +158,21 @@ class Program
     }
     static void ShowStudent()
     {
+        Console.Clear();
+        Console.WriteLine("СПИСОК СТУДЕНТОВ");
 
+        if (students.Count == 0)
+        {
+            Console.WriteLine("Студентов нет");
+            return;
+        }
+
+        foreach (var student in students)
+        {
+            student.Print();
+            Console.WriteLine("");
+        }
     }
+
     
 }
