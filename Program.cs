@@ -3,7 +3,25 @@ class Program
 {
     static void Main()
     {
-
+        List<Student> students = new List<Student>();
+        List<Teacher> list = new List<Teacher>();  
+        List<Cource> cources = new List<Cource>();
+    }
+    static void ShowMenu()
+    {
+        while (true)
+        {
+            Console.WriteLine("1. Добавить студента");
+            Console.WriteLine("2. Добавить учителя");
+            Console.WriteLine("3. Добавить курс");
+            Console.WriteLine("4. Показать всех студентов");
+            Console.WriteLine("5. Показать всех учителей");
+            Console.WriteLine("6. Показать все курсы");
+            Console.WriteLine("7. Записаться на курс (студент)");
+            Console.WriteLine("8. Записаться на курс (учитель)");
+            Console.WriteLine("9. Показать курсы студента");
+            Console.WriteLine("10. Показать курсы учителя");
+        }
     }
 }
 class Person
