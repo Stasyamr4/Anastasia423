@@ -127,8 +127,33 @@ class Program
 
     static void Main()
     {
+
+        AddTestData();
         ShowMenu();
+      
     }
+    static void AddTestData()
+    {
+        // Добавляем тестовых студентов
+        students.Add(new Student("Иванов Иван Иванович", new DateOnly(2000, 5, 15), "М", 244878, "+79991112233", "Москва"));
+        students.Add(new Student("Петрова Анна Сергеевна", new DateOnly(2001, 8, 22), "Ж", 237856, "+79992223344", "Санкт-Петербург"));
+
+        // Добавляем тестовых учителей
+        teachers.Add(new Teacher("Сидоров Алексей Владимирович", new DateOnly(1980, 3, 10), "М", "Физика", "+79776153755", "Москва"));
+        teachers.Add(new Teacher("Козлова Елена Михайловна", new DateOnly(1975, 11, 5), "Ж", "Математика", "+79256754323", "Казань"));
+
+        // Добавляем тестовые курсы
+        cources.Add(new Cource("Высшая математика", 30));
+        cources.Add(new Cource("Общая физика", 20));
+        cources.Add(new Cource("Русский язык", 20));
+        cources.Add(new Cource("Английский язык", 20));
+        cources.Add(new Cource("Испанский язык", 20));
+        cources.Add(new Cource("Литература и писатели", 20));
+        cources.Add(new Cource("Изо", 20));
+
+        Console.WriteLine("Тестовые данные загружены!");
+    }
+
     static void ShowMenu()
     {
         while (true)
