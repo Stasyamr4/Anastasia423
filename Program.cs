@@ -414,5 +414,101 @@ class Program
         // Записываем учителя на курс
         searchTeacher.AddCource(selectedCource);
     }
+    static void ShowCourceStudent()
+    {
+        Console.Clear();
+        Console.WriteLine("КУРСЫ СТУДЕНТА");
 
+        if (students.Count == 0)
+        {
+            Console.WriteLine("Студентов нет");
+            return;
+        }
+
+        // Показываем всех студентов
+        Console.WriteLine("\nСписок студентов:");
+        foreach (var student in students)
+        {
+            Console.WriteLine($"{student.id}. {student.FIO}");
+        }
+
+        // Выбираем студента
+        Console.Write("\nВведите ID студента: ");
+        if (!int.TryParse(Console.ReadLine(), out int studentId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
+
+        // Ищем студента
+        Student searchStudent = students.FirstOrDefault(s => s.id == studentId);
+        if (searchStudent == null)
+        {
+            Console.WriteLine("Ошибка: студент не найден!");
+            return;
+        }
+
+        // Показываем курсы выбранного студента
+        Console.WriteLine($"\nКурсы студента {searchStudent.FIO}:");
+        if (searchStudent.cources.Count == 0)
+        {
+            Console.WriteLine("Нет записанных курсов");
+        }
+        else
+        {
+            foreach (var cource in searchStudent.cources)
+            {
+                Console.WriteLine($"  - {cource.Name} ({cource.Hours} часов)");
+            }
+        }
+    }
+    static void ShowCourceTeacher()
+    {
+        Console.Clear();
+        Console.WriteLine("КУРСЫ УЧИТЕЛЯ");
+
+        if (teachers.Count == 0)
+        {
+            Console.WriteLine("Учителей нет");
+            return;
+        }
+
+        // Показываем всех учителей
+        Console.WriteLine("\nСписок учителей:");
+        foreach (var teacher in teachers)
+        {
+            Console.WriteLine($"{teacher.id}. {teacher.FIO}");
+        }
+
+        // Выбираем учителя
+        Console.Write("\nВведите ID учителя: ");
+        if (!int.TryParse(Console.ReadLine(), out int teacherId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
+
+        // Ищем учителя
+        Teacher searchTeacher = teachers.FirstOrDefault(t => t.id == teacherId);
+        if (searchTeacher == null)
+        {
+            Console.WriteLine("Ошибка: учитель не найден!");
+            return;
+        }
+
+        // Показываем курсы выбранного учителя
+        Console.WriteLine($"\nКурсы учителя {searchTeacher.FIO}:");
+        if (searchTeacher.cources.Count == 0)
+        {
+            Console.WriteLine("Нет записанных курсов");
+        }
+        else
+        {
+            foreach (var cource in searchTeacher.cources)
+            {
+                Console.WriteLine($"  - {cource.Name} ({cource.Hours} часов)");
+            }
+        }
+
+    }
     }
