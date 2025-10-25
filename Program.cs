@@ -36,11 +36,25 @@ class Student : Person
         City = city;
         cources = new List<Cource>();
     }
+    public void AddCource(Cource cource)
+    {
+        cources.Add(cource);
+        Console.WriteLine($"Студент {FIO} успешно записан на курс '{cource.Name}'");
+    }
     public override void Print()
     {
         Console.WriteLine("Студент");
         base.Print();
         Console.WriteLine($"Студент ID: {StudentNumberID}\nТелефон: {Telephone}\nГород: {City}");
+
+        if (cources.Count > 0)
+        {
+            Console.WriteLine("Курсы:");
+            foreach (var cource in cources)
+            {
+                Console.WriteLine($"  - {cource.Name}");
+            }
+        }
     }
 }
 class Teacher : Person
@@ -50,6 +64,7 @@ class Teacher : Person
     private string Subject;
     private string Telephone;
     private string City;
+    public List<Cource> cources;
 
 
     public Teacher(string fio, DateOnly birthday, string gender, string subject, string telephone, string city)
@@ -59,6 +74,12 @@ class Teacher : Person
         Subject = subject;
         Telephone = telephone;
         City = city;
+        cources = new List<Cource>();
+    }
+    public void AddCource(Cource cource)
+    {
+        cources.Add(cource);
+        Console.WriteLine($"Учитель {FIO} успешно записан на курс '{cource.Name}'");
     }
 
     public override void Print()
@@ -66,6 +87,15 @@ class Teacher : Person
         Console.WriteLine("Учитель");
         base.Print();
         Console.WriteLine($"Предмет: {Subject}\nТелефон: {Telephone}\nГород: {City}");
+
+        if (cources.Count > 0)
+        {
+            Console.WriteLine("Преподаваемые курсы:");
+            foreach (var cource in cources)
+            {
+                Console.WriteLine($"  - {cource.Name}");
+            }
+        }
     }
 }
 class Cource
@@ -302,10 +332,24 @@ class Program
         serchSt.AddCource(selectedCource);
     }
 
+    static void RegisterTeacher()
+    {
+        Console.Clear();
+        Console.WriteLine("ЗАПИСЬ УЧИТЕЛЯ НА КУРС");
+
+        if (teachers.Count == 0)
+        {
+            Console.WriteLine("Ошибка: нет учителей!");
+            return;
+        }
+
+        if (cources.Count == 0)
+        {
+            Console.WriteLine("Ошибка: нет курсов!");
+            return;
+        }
 
 
 
-}
-
-
-}
+    }
+    }
