@@ -348,8 +348,71 @@ class Program
             Console.WriteLine("Ошибка: нет курсов!");
             return;
         }
+        Console.WriteLine("\nСписок учителей:");
+        foreach (var teacher in teachers)
+        {
+            Console.WriteLine($"{teacher.id}. {teacher.FIO}");
+        }
+        // Выбираем учителя
+        Console.Write("\nВведите ID учителя: ");
+        if (!int.TryParse(Console.ReadLine(), out int teacherId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
 
+        // Ищем учителя
+        Teacher searchTeacher = teachers.FirstOrDefault(t => t.id == teacherId);
+        if (searchTeacher == null)
+        {
+            Console.WriteLine("Ошибка: учитель не найден!");
+            return;
+        }
+        Console.WriteLine($"\nТекущие курсы учителя {searchTeacher.FIO}:");
+        if (searchTeacher.cources.Count == 0)
+        {
+            Console.WriteLine("Нет записанных курсов");
+        }
+        else
+        {
+            foreach (var cource in searchTeacher.cources)
+            {
+                Console.WriteLine($"  - {cource.Name}");
+            }
+        }
+        Console.WriteLine("\nВсе доступные курсы:");
+        foreach (var cource in cources)
+        {
+            // Показываем только те курсы, на которые учитель еще не записан
+            if (!searchTeacher.cources.Any(c => c.id == cource.id))
+            {
+                Console.WriteLine($"{cource.id}. {cource.Name}");
+            }
+        }
 
+        // Выбираем курс для записи
+        Console.Write("\nВведите ID курса для записи: ");
+        if (!int.TryParse(Console.ReadLine(), out int courceId))
+        {
+            Console.WriteLine("Ошибка: нужно ввести число!");
+            return;
+        }
+        Cource selectedCource = cources.FirstOrDefault(c => c.id == courceId);
+        if (selectedCource == null)
+        {
+            Console.WriteLine("Ошибка: курс не найден!");
+            return;
+        }
 
+        // Проверяем, не записан ли уже учитель на этот курс
+        if (searchTeacher.cources.Any(c => c.id == courceId))
+        {
+            Console.WriteLine($"ОШИБКА: Учитель уже записан на курс '{selectedCource.Name}'!");
+            return;
+        }
+
+        // Записываем учителя на курс
+        searchTeacher.AddCource(selectedCource);
     }
+
     }
