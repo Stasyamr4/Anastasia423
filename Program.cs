@@ -257,3 +257,19 @@ class Program
             Console.WriteLine("==============================\n");
         }
     }
+    class Weapon
+    {
+        public string Name { get; set; } = "";
+        public int Damage { get; set; }
+
+        public Weapon(string name, int damage)
+        {
+            Name = name;
+            Damage = damage;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} (Урон: {Damage})";
+        }
+    }
