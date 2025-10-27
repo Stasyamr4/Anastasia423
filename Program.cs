@@ -13,18 +13,18 @@ class Program
 
     class Game
     {
-        private Random random = new Random();
-        private int turnCount = 0;
+        private Random random = new Random(); //генератор случайных чисел
+        private int turnCount = 0; //счетчик ходов
 
-        public void StartGame()
+        public void StartGame() //создание игрока
         {
             Player player = new Player(100);
-            Console.WriteLine("=== ТЕКСТОВЫЙ РОГАЛИК ===");
+            Console.WriteLine("ТЕКСТОВЫЙ РОГАЛИК");
 
             while (player.HP > 0)
             {
-                turnCount++;
-                Console.WriteLine($"\n--- Ход {turnCount} ---");
+                turnCount++; //увеличиваем счетчик ходов
+                Console.WriteLine($"\nХод {turnCount}");
                 player.ShowStats();
 
                 // Каждые 10 ходов - босс
@@ -86,7 +86,7 @@ class Program
 
         public void StartBattle(Player player, Enemy enemy)
         {
-            Console.WriteLine($"\n=== ВСТРЕЧА С {enemy.Name.ToUpper()} ===");
+            Console.WriteLine($"\nВСТРЕЧА С {enemy.Name.ToUpper()}");
             enemy.ShowStats();
 
             bool playerFrozen = false;
@@ -133,9 +133,9 @@ class Program
 
         private void PlayerTurn(Player player, Enemy enemy)
         {
-            Console.WriteLine("\n--- Ваш ход ---");
-            Console.WriteLine("1 - Атаковать");
-            Console.WriteLine("2 - Защищаться");
+            Console.WriteLine("\nВаш ход ");
+            Console.WriteLine("1 Атаковать");
+            Console.WriteLine("2 Защищаться");
             Console.Write("Выберите действие: ");
 
             string choice = Console.ReadLine();
@@ -158,7 +158,7 @@ class Program
 
         private void EnemyTurn(Player player, Enemy enemy)
         {
-            Console.WriteLine("\n--- Ход врага ---");
+            Console.WriteLine("\n Ход врага ");
             enemy.AttackPlayer(player);
             Console.WriteLine($"Ваше здоровье: {player.HP}");
         }
@@ -250,7 +250,7 @@ class Program
 
         public void ShowStats()
         {
-            Console.WriteLine("======          СТАТИСТИКА ИГРОКА          ======");
+            Console.WriteLine("        СТАТИСТИКА ИГРОКА         ");
             Console.WriteLine($"Здоровье: {HP}");
             Console.WriteLine($"Оружие: {CurrentWeapon}");
             Console.WriteLine($"Броня: {CurrentArmor}");
@@ -324,7 +324,7 @@ class Program
         }
         public void ShowStats()
         {
-            Console.WriteLine($"=== {Name} ===");
+            Console.WriteLine($" {Name} ");
             Console.WriteLine($"Здоровье: {HP}");
             Console.WriteLine($"Атака: {Attack}");
             Console.WriteLine($"Защита: {Defense}");
@@ -505,7 +505,7 @@ class Program
 
         public void Open(Player player)
         {
-            Console.WriteLine("\n=== ВЫ НАШЛИ СУНДУК! ===");
+            Console.WriteLine("\n ВЫ НАШЛИ СУНДУК!");
 
             int chestType = random.Next(1, 4); // 1-3
 
