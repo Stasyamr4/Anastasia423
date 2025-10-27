@@ -437,3 +437,34 @@ class Program
             Console.WriteLine($"{Name} игнорирует защиту и наносит {Attack} урона!");
         }
     }
+    class ArchmageCPP : Boss
+    {
+        double freezeChance = 0.35;
+        public bool FreezeApplied { get; private set; }
+
+        public ArchmageCPP() : base("Архимаг C++", (int)(12 * 1.6), (int)(20 * 1.8), (int)(1 * 1.1))
+        {
+            FreezeApplied = false;
+        }
+
+        public override void AttackPlayer(Player player)
+        {
+            Random random = new Random();
+            double damage = Attack;
+
+            player.TakeDamage((int)damage);
+            Console.WriteLine($"{Name} атакует и наносит {damage} урона!");
+
+            if (random.NextDouble() < freezeChance)
+            {
+                FreezeApplied = true;
+                Console.WriteLine($"{Name} накладывает заморозку! Вы пропустите следующий ход!");
+            }
+        }
+
+        public void ResetFreeze()
+        {
+            FreezeApplied = false;
+        }
+    }
+
