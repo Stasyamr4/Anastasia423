@@ -426,3 +426,14 @@ class Program
             Console.WriteLine($"{Name} атакует и наносит {damage} урона!");
         }
     }
+    class Kovalski : Boss
+    {
+        public Kovalski() : base("Ковальски", (int)(1.3 * 10), (int)(2.5 * 25), (int)(1.4 * 2)) { }
+
+        public override void AttackPlayer(Player player)
+        {
+            // Игнорирует защиту как скелет
+            player.TakeDamage(Attack, true);
+            Console.WriteLine($"{Name} игнорирует защиту и наносит {Attack} урона!");
+        }
+    }
