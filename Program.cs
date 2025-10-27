@@ -352,3 +352,17 @@ class Program
             Console.WriteLine($"{Name} атакует и наносит {damage} урона!");
         }
     }
+    class Skeleton : Enemy
+    {
+        public Skeleton() : base("Скелет", 10, 25, 2) { }
+
+        public override void AttackPlayer(Player player)
+        {
+            Random random = new Random();
+            double damage = Attack;
+
+            // Скелет игнорирует защиту игрока
+            player.TakeDamage(Attack, true);
+            Console.WriteLine($"{Name} игнорирует защиту и наносит {damage} урона!");
+        }
+    }
