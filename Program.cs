@@ -366,3 +366,33 @@ class Program
             Console.WriteLine($"{Name} игнорирует защиту и наносит {damage} урона!");
         }
     }
+    class Mage : Enemy
+    {
+        double freezeChance = 0.25;
+        public bool FreezeApplied { get; private set; }
+
+        public Mage() : base("Маг", 12, 20, 1)
+        {
+            FreezeApplied = false;
+        }
+
+        public override void AttackPlayer(Player player)
+        {
+            Random random = new Random();
+            double damage = Attack;
+
+            player.TakeDamage((int)damage);
+            Console.WriteLine($"{Name} атакует и наносит {damage} урона!");
+
+            if (random.NextDouble() < freezeChance)
+            {
+                FreezeApplied = true;
+                Console.WriteLine($"{Name} накладывает заморозку! Вы пропустите следующий ход!");
+            }
+        }
+
+        public void ResetFreeze()
+        {
+            FreezeApplied = false;
+        }
+    }
