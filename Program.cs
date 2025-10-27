@@ -396,3 +396,33 @@ class Program
             FreezeApplied = false;
         }
     }
+    class Boss : Enemy
+    {
+        public Boss(string name, int attack, int hp, int defense) : base(name, attack, hp, defense)
+        {
+        }
+    }
+    class VVG : Boss
+    {
+        double critchance = 0.3;
+        double critmnojitel = 2;
+        public VVG() : base("ВВГ", (int)(1.5 * 8), (int)(2 * 30), (int)(1.2 * 3))
+        {
+
+        }
+
+        public override void AttackPlayer(Player player)
+        {
+            Random random = new Random();
+            double damage = Attack;
+
+            if (random.NextDouble() < critchance)
+            {
+                damage *= critmnojitel;
+                Console.WriteLine("Критический удар!");
+            }
+
+            player.TakeDamage((int)damage);
+            Console.WriteLine($"{Name} атакует и наносит {damage} урона!");
+        }
+    }
