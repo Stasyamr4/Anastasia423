@@ -143,6 +143,55 @@ namespace ConsoleApp1
                 Console.WriteLine($"{part.partName}: {item.countParts} шт.");
             }
         }
+
+        private static void ProcessPlayerChoice(player player, cars clientCar)
+        {
+            var defect = Core.Context.defects.FirstOrDefault(d => d.id == clientCar.defectID);
+            var neededPartId = defect.partNeedID;
+
+            Console.WriteLine("Ваш склад:");
+            var inventory = Core.Context.parts_player.Where(i => i.idPlayer == player.id && i.countParts > 0).ToList();
+
+            if (inventory.Any())
+            {
+                for (int i = 0; i < inventory.Count; i++)
+                {
+                    var part = Core.Context.Parts.FirstOrDefault(p => p.partID == inventory[i].idPart);
+                    Console.WriteLine($"{i + 1}. {part.partName} - {inventory[i].countParts} шт.");
+                }
+
+                Console.WriteLine($"0. Отказать (штраф 1000 руб.)");
+                Console.WriteLine("Выберите деталь для замены:");
+
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    if (choice == 0)
+                    {
+                        // Отказ от обслуживания
+                        player.MyMoney -= 1000;
+                        Core.Context.SaveChanges();
+                        Console.WriteLine("Вы отказали клиенту. Штраф 1000 руб.");
+                    }
+                    else if (choice > 0 && choice <= inventory.Count)
+                    {
+                        var selectedPartId = inventory[choice - 1].idPart;
+                        TryRepair(player, clientCar, selectedPartId, neededPartId);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Склад пуст! Придется отказать клиенту.");
+                player.MyMoney -= 1000;
+                Core.Context.SaveChanges();
+                Console.WriteLine("Штраф 1000 руб.");
+            }
+        }
+
+        private static void TryRepair(player player, cars clientCar, int selectedPartId, int neededPartId)
+        {
+
+        }
     }
 }
 
