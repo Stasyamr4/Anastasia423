@@ -20,7 +20,7 @@ namespace ConsoleApp1
             {
                 player = new player { MyMoney = 5000 };
                 Core.Context.player.Add(player);
-                Core.Context.
+                Core.Context.SaveChanges();
                 Console.WriteLine("Создан новый игрок!");
             }
             bool gameRunning = true;

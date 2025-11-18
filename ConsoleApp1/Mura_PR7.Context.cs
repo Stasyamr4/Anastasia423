@@ -13,10 +13,10 @@ namespace ConsoleApp1
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Mura_PR7Entities : DbContext
+    public partial class Mura_PR7Entities1 : DbContext
     {
-        public Mura_PR7Entities()
-            : base("name=Mura_PR7Entities")
+        public Mura_PR7Entities1()
+            : base("name=Mura_PR7Entities1")
         {
         }
     
