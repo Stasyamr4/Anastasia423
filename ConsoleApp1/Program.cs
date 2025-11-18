@@ -127,6 +127,11 @@ namespace ConsoleApp1
 
         }
 
+        private static decimal CalculateRepairCost(parts part)
+        {
+            return (decimal)(part.basePrice + (part.basePrice * (decimal)(part.workCost)));
+        }
+
         private static void ShowInventory(player player)
         {
             var inventory = Core.Context.parts_player.Where(i => i.idPlayer == 1).ToList();
