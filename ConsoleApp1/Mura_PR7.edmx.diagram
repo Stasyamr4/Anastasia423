@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="638d4fa0b061488f907f6ac2ecdb4d1c" Name="Diagram1">
+      <Diagram DiagramId="e003fc8d5e474dd0be2a4fb373ce428c" Name="Diagram1">
         <EntityTypeShape EntityType="Mura_PR7Model.cars" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Mura_PR7Model.defects" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Mura_PR7Model.OrderParts" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />

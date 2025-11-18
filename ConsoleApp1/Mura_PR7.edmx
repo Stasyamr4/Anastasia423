@@ -321,7 +321,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Mura_PR7Entities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Mura_PR7Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="cars" EntityType="Self.cars" />
           <EntitySet Name="defects" EntityType="Self.defects" />
           <EntitySet Name="OrderParts" EntityType="Self.OrderParts" />
@@ -359,7 +359,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище Mura_PR7ModelContainer" CdmEntityContainer="Mura_PR7Entities1">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Mura_PR7ModelContainer" CdmEntityContainer="Mura_PR7Entities">
           <EntitySetMapping Name="cars">
             <EntityTypeMapping TypeName="Mura_PR7Model.cars">
               <MappingFragment StoreEntitySet="cars">
