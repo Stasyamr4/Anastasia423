@@ -124,7 +124,51 @@ namespace ConsoleApp1
         
         private static void ShowStoreMenu(player player)
         {
+            Console.Clear();
+            var availableParts = Core.Context.Parts.ToList();
+            Console.WriteLine("Доступные запчасти:");
 
+            for (int i = 0; i < availableParts.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {availableParts[i].partName} - {availableParts[i].basePrice} руб.");
+            }
+
+            Console.WriteLine("\nВведите номер детали для покупки (0 - отмена):");
+            if (int.TryParse(Console.ReadLine(), out int partChoice) && partChoice > 0 && partChoice <= availableParts.Count)
+            {
+                Console.WriteLine("Введите количество:");
+                if (int.TryParse(Console.ReadLine(), out int quantity) && quantity > 0)
+                {
+                    PurchaseParts(player, availableParts[partChoice - 1].partID, quantity);
+                }
+            }
+        }
+
+        private static void PurchaseParts(player player, int partId, int quantity)
+        {
+            var part = Core.Context.Parts.FirstOrDefault(p => p.partID == partId);
+            var totalCost = part.basePrice * quantity;
+
+            if (player.MyMoney >= totalCost)
+            {
+                player.MyMoney -= totalCost;
+
+                var pendingOrder = new OrderParts
+                {
+                    PlayerID = player.id,
+                    PartID = partId,
+                    count = quantity,
+                    carsUntilDelivery = 2
+                };
+                Core.Context.OrderParts.Add(pendingOrder);
+
+                Core.Context.SaveChanges();
+                Console.WriteLine($"Заказ на {quantity} {part.partName} создан! Поставка через 2 машины.");
+            }
+            else
+            {
+                Console.WriteLine("Недостаточно денег!");
+            }
         }
 
         private static decimal CalculateRepairCost(parts part)
