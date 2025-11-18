@@ -267,6 +267,36 @@ namespace ConsoleApp1
 
             Core.Context.SaveChanges();
         }
+
+        private static void ProcessDeliveries(player player)
+        {
+            var orders = Core.Context.OrderParts.Where(o => o.PlayerID == player.Id).ToList();
+            foreach (var order in orders)
+            {
+                order.carsUntilDelivery--;
+                if (order.carsUntilDelivery <= 0)
+                {
+                    // Доставляем детали на склад
+                    var inventory = Core.Context.parts_player.FirstOrDefault(i =>
+                        i.idPlayer == player.id && i.idPart == order.PartID);
+
+                    if (inventory == null)
+                    {
+                        inventory = new parts_player
+                        {
+                            idPlayer = player.id,
+                            idPart = order.PartID,
+                            countParts = 0
+                        };
+                        Core.Context.parts_player.Add(inventory);
+                    }
+
+                    inventory.countParts += order.count;
+                    Core.Context.OrderParts.Remove(order);
+                }
+            }
+            Core.Context.SaveChanges();
+        }
     }
 }
 
