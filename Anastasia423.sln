@@ -5,7 +5,9 @@ VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anastasia423", "Anastasia423.csproj", "{CD1D4084-5751-47D2-9309-069A25D9D941}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "..\ConsoleApp2\ConsoleApp2.csproj", "{5EFD3F7D-3ABE-4377-8CFE-E3033AB42C44}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Новая папка1", "Новая папка1", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{B7649D6E-81D0-42B8-9A27-0945781E78C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,10 @@ Global
 		{CD1D4084-5751-47D2-9309-069A25D9D941}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD1D4084-5751-47D2-9309-069A25D9D941}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD1D4084-5751-47D2-9309-069A25D9D941}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EFD3F7D-3ABE-4377-8CFE-E3033AB42C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EFD3F7D-3ABE-4377-8CFE-E3033AB42C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EFD3F7D-3ABE-4377-8CFE-E3033AB42C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EFD3F7D-3ABE-4377-8CFE-E3033AB42C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7649D6E-81D0-42B8-9A27-0945781E78C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7649D6E-81D0-42B8-9A27-0945781E78C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7649D6E-81D0-42B8-9A27-0945781E78C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7649D6E-81D0-42B8-9A27-0945781E78C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
