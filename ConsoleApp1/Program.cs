@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleApp1
-
 {
     internal class Program
     {
+
         static Random random = new Random();
-        static int carsProcessed = 0; //сколько приехало
-        static int successfulRepairs = 0;//успешные
-        static int failedRepairs = 0;//неудачные
+        static int carsProcessed = 0;
+        static int successfulRepairs = 0;
+        static int failedRepairs = 0;
+
         static void Main(string[] args)
         {
             var player = Core.Context.player.FirstOrDefault();
@@ -23,11 +25,12 @@ namespace ConsoleApp1
                 Core.Context.SaveChanges();
                 Console.WriteLine("Создан новый игрок!");
             }
+
             bool gameRunning = true;
 
             while (gameRunning)
             {
-                Console.Clear();
+
                 ShowPlayerStatus(player);
                 Console.WriteLine("\n1 - Обслужить следующего клиента");
                 Console.WriteLine("2 - Купить запчасти");
@@ -61,6 +64,8 @@ namespace ConsoleApp1
 
             Console.WriteLine("Игра завершена!");
         }
+
+
         private static void ShowPlayerStatus(player player)
         {
             Console.WriteLine($"=== АВТОСЕРВИС ===");
@@ -81,9 +86,12 @@ namespace ConsoleApp1
                 }
             }
         }
+
         private static void ProcessNextCar(player player)
         {
             Console.Clear();
+
+
             ProcessDeliveries(player);
 
             // Генерируем случайного клиента
@@ -121,7 +129,96 @@ namespace ConsoleApp1
             Console.WriteLine($"Стоимость ремонта: {repairCost} руб.");
             Console.WriteLine();
         }
-        
+
+        private static decimal CalculateRepairCost(parts part)
+        {
+            return (decimal)(part.basePrice + (part.basePrice * (decimal)(part.workCost)));
+        }
+
+        private static void ProcessPlayerChoice(player player, cars clientCar)
+        {
+            var defect = Core.Context.defects.FirstOrDefault(d => d.id == clientCar.defectID);
+            var neededPartId = defect.partNeedID;
+
+            Console.WriteLine("Ваш склад:");
+            var inventory = Core.Context.parts_player.Where(i => i.idPlayer == player.id && i.countParts > 0).ToList();
+
+            if (inventory.Any())
+            {
+                int index = 1;
+                foreach (var item in inventory)
+                {
+                    var part = Core.Context.parts.FirstOrDefault(p => p.partID == item.idPart);
+                    Console.WriteLine($"{index}. {part.partName} - {item.countParts} шт.");
+                    index++;
+                }
+
+                Console.WriteLine($"0. Отказать (штраф 1000 руб.)");
+                Console.WriteLine("Выберите деталь для замены:");
+
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    if (choice == 0)
+                    {
+                        // Отказ от обслуживания
+                        player.MyMoney -= 1000;
+                        Core.Context.SaveChanges();
+                        Console.WriteLine("Вы отказали клиенту. Штраф 1000 руб.");
+                    }
+                    else if (choice > 0 && choice <= inventory.Count)
+                    {
+                        var selectedItem = inventory[choice - 1];
+                        var selectedPartId = selectedItem.idPart;
+                        TryRepair(player, clientCar, selectedPartId,(int)neededPartId);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Склад пуст! Придется отказать клиенту.");
+                player.MyMoney -= 1000;
+                Core.Context.SaveChanges();
+                Console.WriteLine("Штраф 1000 руб.");
+            }
+        }
+
+        private static void TryRepair(player player, cars clientCar, int selectedPartId, int neededPartId)
+        {
+            var inventory = Core.Context.parts_player.FirstOrDefault(i => i.idPlayer == player.id && i.idPart == selectedPartId);
+
+            if (inventory == null || inventory.countParts <= 0)
+            {
+                player.MyMoney -= 1000;
+                Console.WriteLine("Недостаточно деталей! Штраф 1000 руб.");
+                Core.Context.SaveChanges();
+                return;
+            }
+
+            inventory.countParts--;
+
+            bool isCorrectPart = (selectedPartId == neededPartId);
+
+            if (isCorrectPart)
+            {
+                var part = Core.Context.parts.FirstOrDefault(p => p.partID == selectedPartId);
+                var repairCost = CalculateRepairCost(part);
+                player.MyMoney += repairCost;
+                Console.WriteLine($"Успешный ремонт! Получено {repairCost} руб.");
+                successfulRepairs++;
+            }
+            else
+            {
+                var part = Core.Context.parts.FirstOrDefault(p => p.partID == selectedPartId);
+                var penalty = part.basePrice * 2;
+                player.MyMoney -= (decimal)penalty;
+                Console.WriteLine($"Неправильная деталь! Штраф {penalty} руб.");
+                failedRepairs++;
+            }
+
+            Core.Context.SaveChanges();
+        }
+
+
         private static void ShowStoreMenu(player player)
         {
             Console.Clear();
@@ -171,103 +268,6 @@ namespace ConsoleApp1
             }
         }
 
-        private static decimal CalculateRepairCost(parts part)
-        {
-            return (decimal)(part.basePrice + (part.basePrice * (decimal)(part.workCost)));
-        }
-
-        private static void ShowInventory(player player)
-        {
-            var inventory = Core.Context.parts_player.Where(i => i.idPlayer == 1).ToList();
-            Console.WriteLine("Ваш склад:");
-
-            foreach (var item in inventory)
-            {
-                var part = Core.Context.parts.FirstOrDefault(p => p.partID == item.idPart);
-                Console.WriteLine($"{part.partName}: {item.countParts} шт.");
-            }
-        }
-
-        private static void ProcessPlayerChoice(player player, cars clientCar)
-        {
-            var defect = Core.Context.defects.FirstOrDefault(d => d.id == clientCar.defectID);
-            var neededPartId = defect.partNeedID;
-
-            Console.WriteLine("Ваш склад:");
-            var inventory = Core.Context.parts_player.Where(i => i.idPlayer == player.id && i.countParts > 0).ToList();
-
-            if (inventory.Any())
-            {
-                for (int i = 0; i < inventory.Count; i++)
-                {
-                    var part = Core.Context.parts.FirstOrDefault(p => p.partID == inventory[i].idPart);
-                    Console.WriteLine($"{i + 1}. {part.partName} - {inventory[i].countParts} шт.");
-                }
-
-                Console.WriteLine($"0. Отказать (штраф 1000 руб.)");
-                Console.WriteLine("Выберите деталь для замены:");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
-                {
-                    if (choice == 0)
-                    {
-                        // Отказ от обслуживания
-                        player.MyMoney -= 1000;
-                        Core.Context.SaveChanges();
-                        Console.WriteLine("Вы отказали клиенту. Штраф 1000 руб.");
-                    }
-                    else if (choice > 0 && choice <= inventory.Count)
-                    {
-                        var selectedPartId = inventory[choice - 1].idPart;
-                        TryRepair(player, clientCar, selectedPartId, (int)neededPartId);
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Склад пуст! Придется отказать клиенту.");
-                player.MyMoney -= 1000;
-                Core.Context.SaveChanges();
-                Console.WriteLine("Штраф 1000 руб.");
-            }
-        }
-
-        private static void TryRepair(player player, cars clientCar, int selectedPartId, int neededPartId)
-        {
-            var inventory = Core.Context.parts_player.FirstOrDefault(i => i.idPlayer == player.id && i.idPart == selectedPartId);
-
-            if (inventory == null || inventory.countParts <= 0)
-            {
-                player.MyMoney -= 1000;
-                Console.WriteLine("Недостаточно деталей! Штраф 1000 руб.");
-                Core.Context.SaveChanges();
-                return;
-            }
-
-            inventory.countParts--;
-
-            bool isCorrectPart = (selectedPartId == neededPartId);
-
-            if (isCorrectPart)
-            {
-                var part = Core.Context.parts.FirstOrDefault(p => p.partID == selectedPartId);
-                var repairCost = CalculateRepairCost(part);
-                player.MyMoney += repairCost;
-                Console.WriteLine($"Успешный ремонт! Получено {repairCost} руб.");
-                successfulRepairs++;
-            }
-            else
-            {
-                var part = Core.Context.parts.FirstOrDefault(p => p.partID == selectedPartId);
-                var penalty = part.basePrice * 2;
-                player.MyMoney -= (decimal)penalty;
-                Console.WriteLine($"Неправильная деталь! Штраф {penalty} руб.");
-                failedRepairs++;
-            }
-
-            Core.Context.SaveChanges();
-        }
-
         private static void ProcessDeliveries(player player)
         {
             var orders = Core.Context.OrderParts.Where(o => o.PlayerID == player.id).ToList();
@@ -297,6 +297,17 @@ namespace ConsoleApp1
             }
             Core.Context.SaveChanges();
         }
+
+        private static void ShowInventory(player player)
+        {
+            var inventory = Core.Context.parts_player.Where(i => i.idPlayer == 1).ToList();
+            Console.WriteLine("Ваш склад:");
+
+            foreach (var item in inventory)
+            {
+                var part = Core.Context.parts.FirstOrDefault(p => p.partID == item.idPart);
+                Console.WriteLine($"{part.partName}: {item.countParts} шт.");
+            }
+        }
     }
 }
-
