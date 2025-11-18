@@ -270,7 +270,7 @@ namespace ConsoleApp1
 
         private static void ProcessDeliveries(player player)
         {
-            var orders = Core.Context.OrderParts.Where(o => o.PlayerID == player.Id).ToList();
+            var orders = Core.Context.OrderParts.Where(o => o.PlayerID == player.id).ToList();
             foreach (var order in orders)
             {
                 order.carsUntilDelivery--;
