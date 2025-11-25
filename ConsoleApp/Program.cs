@@ -11,6 +11,10 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
         }
+        static void Menu(string[] args)
+        {
+            Console.WriteLine("");
+        }
         //Меню
         //{
         //регистрация
