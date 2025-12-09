@@ -27,7 +27,7 @@ namespace ConsoleApp
                     {
                         case 1:
                             Console.Clear();
-                            //registration();
+                            registration();
                             break;
                         case 2:
                             Console.Clear();
@@ -52,22 +52,44 @@ namespace ConsoleApp
         public static void registration()
         {
             User user = new User();
-            Console.WriteLine("Введите логин");
-            string login = Console.ReadLine();
-            Console.WriteLine("Введите пароль");
-            string password = Console.ReadLine();
-            if ((login != null) && (password != null))
+            bool flag = true;
+            while (flag)
             {
-                var AreUser = Core.Context.User.Where(u => u.login == login).FirstOrDefault();
-                if (AreUser == null)
+                Console.WriteLine("Введите логин");
+                string login = Console.ReadLine();
+                Console.WriteLine("Введите пароль");
+                string password = Console.ReadLine();
+                if ((login != null) && (password != null))
                 {
-                    user.login = login;
-                    while (true)
+                    var AreUser = Core.Context.User.Where(u => u.login == login).FirstOrDefault();
+                    if (AreUser == null)
                     {
-                        //попросить ввести пароль еще раз, если не совпадут - введет еще раз благодаря бесконечному циклу
+                        user.login = login;
+                        while (true)
+                        {
+                            //попросить ввести пароль еще раз, если не совпадут - введет еще раз благодаря бесконечному циклу
+                            Console.WriteLine("Введите пароль еще раз");
+                            string password2 = Console.ReadLine();
+                            if ((password2 != null) && (password2 == password))
+                            {
+                                user.password = password;
+                                Core.Context.User.Add(user);
+                                Core.Context.SaveChanges();
+                                Console.WriteLine("Пользователь успешно добавлен!");
+                                flag = false;
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Пароли не совпадают");
+                            }
+                        }
+
                     }
-                    user.password = password;
-                    Core.Context.User.Add(user);
+                    else
+                    {
+                        Console.WriteLine("Пользователь с таким именем уже существует");
+                    }
                 }
             }
         }
