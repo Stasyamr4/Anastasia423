@@ -4,15 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1679699ff1ce43ceb0c0de801f8fc7f8" Name="Diagram1">
-        <EntityTypeShape EntityType="pr8_muraModel.Basket" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.Delivery" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.Delivery_Product" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.Product" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.Product_Basket" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.PVZ" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.sysdiagrams" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="pr8_muraModel.User" Width="1.5" PointX="7.125" PointY="4.25" IsExpanded="true" />
+      <Diagram DiagramId="be0a5243d00d4a09a9b79403a53c5bad" Name="Diagram1">
+        <EntityTypeShape EntityType="pr8_muraModel.Basket" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.Delivery" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.Delivery_Product" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.Product" Width="1.5" PointX="3" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.Product_Basket" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.PVZ" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="pr8_muraModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="pr8_muraModel.FK_Basket_User" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Product_Basket_Basket" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Delivery_Product_Delivery" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Delivery_PVZ" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Delivery_User" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Delivery_Product_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="pr8_muraModel.FK_Product_Basket_Product" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

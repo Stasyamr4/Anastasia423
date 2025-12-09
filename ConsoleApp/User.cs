@@ -14,10 +14,22 @@ namespace ConsoleApp
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Basket = new HashSet<Basket>();
+            this.Delivery = new HashSet<Delivery>();
+        }
+    
         public int id { get; set; }
         public string login { get; set; }
         public string password { get; set; }
         public decimal money { get; set; }
         public Nullable<int> age { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Basket> Basket { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Delivery> Delivery { get; set; }
     }
 }

@@ -96,29 +96,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <EntityDeploy Include="pr8_mura.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>pr8_mura.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="packages.config" />
     <None Include="pr8_mura.edmx.diagram">
       <DependentUpon>pr8_mura.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="pr8_mura.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>pr8_mura.Context.cs</LastGenOutput>
       <DependentUpon>pr8_mura.edmx</DependentUpon>
+      <LastGenOutput>pr8_mura.Context.cs</LastGenOutput>
     </Content>
     <Content Include="pr8_mura.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>pr8_mura.edmx</DependentUpon>
       <LastGenOutput>pr8_mura.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

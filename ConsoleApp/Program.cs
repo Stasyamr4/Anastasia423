@@ -10,8 +10,9 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            ShowMenu();
         }
-        static void Menu(string[] args)
+        public static void ShowMenu()
         {
             bool ShowMenu = true;
             while (ShowMenu)
@@ -20,12 +21,13 @@ namespace ConsoleApp
                 Console.WriteLine("1. Регистрация");
                 Console.WriteLine("2. Войти в аккаунт");
                 Console.WriteLine("3. Каталог товаров");
+                Console.WriteLine("0. Выход");
                 if (int.TryParse(Console.ReadLine(), out int choice))
                     switch (choice)
                     {
                         case 1:
                             Console.Clear();
-                            //CreateUser();
+                            //registration();
                             break;
                         case 2:
                             Console.Clear();
@@ -36,28 +38,40 @@ namespace ConsoleApp
                             //Catalogue();
                             break;
                         case 0:
+                            ShowMenu = false;
                             break;
-
-
                     }
-
-
             }
-            //Меню
-            //{
-            //регистрация
-            //войти в аккаунт
-            ///каталог товаров
-            //}
-
-            //Проверка
-            //{
-            //если пользователь вошел, то показываем корзину
-            //}
-
-            //static void registration()
-            //{
-            //}
+        }
+        //Меню
+        //{
+        //регистрация
+        //войти в аккаунт
+        ///каталог товаров
+        //}
+        public static void registration()
+        {
+            User user = new User();
+            Console.WriteLine("Введите логин");
+            string login = Console.ReadLine();
+            Console.WriteLine("Введите пароль");
+            string password = Console.ReadLine();
+            if ((login != null) && (password != null))
+            {
+                var AreUser = Core.Context.User.Where(u => u.login == login).FirstOrDefault();
+                if (AreUser == null)
+                {
+                    user.login = login;
+                    while (true)
+                    {
+                        //попросить ввести пароль еще раз, если не совпадут - введет еще раз благодаря бесконечному циклу
+                    }
+                    user.password = password;
+                    Core.Context.User.Add(user);
+                }
+            }
+        }
+        
             //Регистрация 
             //{
             ////Создать экземпляр класса пользователя из БД
@@ -87,7 +101,13 @@ namespace ConsoleApp
 
             //функция для добавления товара в коризу(Товары товар)
 
+            //функция для показа корзины
+            //Проверка
+            //{
+            //если пользователь вошел, то показываем корзину
+            //}
+
             //фунция для оформления заказа
         }
     }
-}
+

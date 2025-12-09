@@ -14,9 +14,21 @@ namespace ConsoleApp
     
     public partial class Product
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Product()
+        {
+            this.Delivery_Product = new HashSet<Delivery_Product>();
+            this.Product_Basket = new HashSet<Product_Basket>();
+        }
+    
         public int id { get; set; }
         public string name { get; set; }
         public decimal price { get; set; }
         public string description { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Delivery_Product> Delivery_Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product_Basket> Product_Basket { get; set; }
     }
 }

@@ -14,8 +14,12 @@ namespace ConsoleApp
     
     public partial class Delivery_Product
     {
+        public int id { get; set; }
         public int product_id { get; set; }
         public int delivery_id { get; set; }
         public int count { get; set; }
+    
+        public virtual Delivery Delivery { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

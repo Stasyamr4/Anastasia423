@@ -14,9 +14,17 @@ namespace ConsoleApp
     
     public partial class Basket
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Basket()
+        {
+            this.Product_Basket = new HashSet<Product_Basket>();
+        }
+    
         public int id { get; set; }
-        public int product_id { get; set; }
-        public int count { get; set; }
-        public string user_id { get; set; }
+        public int user_id { get; set; }
+    
+        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product_Basket> Product_Basket { get; set; }
     }
 }
