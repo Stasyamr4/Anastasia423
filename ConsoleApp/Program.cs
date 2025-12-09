@@ -141,17 +141,38 @@ namespace ConsoleApp
             }
         }
 
-                //Войти в аккаунт
-                //{
-                //пользователь вводит логин
-                //пользователь вводит пароль 
-                //проверяем есть ли такой лог в базе данных
-                //если есть то проверяем правильный ли пароль, а если нет то выводим ошибку
-                //если все успешно то входим в акк
-                //}
-                public static void Catalogue()
-        {
+        //Войти в аккаунт
+        //{
+        //пользователь вводит логин
+        //пользователь вводит пароль 
+        //проверяем есть ли такой лог в базе данных
+        //если есть то проверяем правильный ли пароль, а если нет то выводим ошибку
+        //если все успешно то входим в акк
+        //}
 
+        public static void Catalogue()
+        {
+            var tovari = Core.Context.Product.ToList();
+            foreach (var item in tovari) 
+            {
+                Console.WriteLine($"id: {item.id}, Название товара: {item.name}, Цена: {item.price}");
+                Console.WriteLine("Хотите посмотреть подробную информацию о товаре? (да/нет)");
+                string vvod = Console.ReadLine().ToLower();
+                switch (vvod)
+                {
+                    case "да":
+                        Console.WriteLine("Введите id товара");
+                        if(int.TryParse(Console.ReadLine(), out int IDtov))
+                        {
+                            //посмотреть такой товар в списке по ID и вывести подробную инф о нем
+                        }
+                        else
+                        {
+                            Console.WriteLine("Введите число!");
+                        }
+                            break;
+                }
+            }
         }
                 //каталог товаров 
                 //{
