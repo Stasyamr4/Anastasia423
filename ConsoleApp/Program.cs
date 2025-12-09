@@ -156,21 +156,29 @@ namespace ConsoleApp
             foreach (var item in tovari) 
             {
                 Console.WriteLine($"id: {item.id}, Название товара: {item.name}, Цена: {item.price}");
-                Console.WriteLine("Хотите посмотреть подробную информацию о товаре? (да/нет)");
-                string vvod = Console.ReadLine().ToLower();
-                switch (vvod)
+                bool flag = true;
+                while (flag)
                 {
-                    case "да":
-                        Console.WriteLine("Введите id товара");
-                        if(int.TryParse(Console.ReadLine(), out int IDtov))
-                        {
-                            //посмотреть такой товар в списке по ID и вывести подробную инф о нем
-                        }
-                        else
-                        {
-                            Console.WriteLine("Введите число!");
-                        }
+                    Console.WriteLine("Хотите посмотреть подробную информацию о товаре? (да/нет)");
+                    string vvod = Console.ReadLine().ToLower();
+                    switch (vvod)
+                    {
+                        case "да":
+                            Console.WriteLine("Введите id товара");
+                            if (int.TryParse(Console.ReadLine(), out int IDtov))
+                            {
+                                //посмотреть такой товар в списке по ID и вывести подробную инф о нем
+                                flag = false;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Введите число!");
+                            }
                             break;
+                        case "нет":
+                            flag = false;
+                            break;
+                    }
                 }
             }
         }
