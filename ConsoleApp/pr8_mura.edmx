@@ -46,7 +46,7 @@
           </Key>
           <Property Name="product_id" Type="int" Nullable="false" />
           <Property Name="basket_id" Type="int" Nullable="false" />
-          <Property Name="count" Type="nchar" MaxLength="10" />
+          <Property Name="count" Type="int" />
         </EntityType>
         <EntityType Name="PVZ">
           <Key>
@@ -254,7 +254,7 @@
           </Key>
           <Property Name="product_id" Type="Int32" Nullable="false" />
           <Property Name="basket_id" Type="Int32" Nullable="false" />
-          <Property Name="count" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="count" Type="Int32" />
           <NavigationProperty Name="Basket" Relationship="Self.FK_Product_Basket_Basket" FromRole="Product_Basket" ToRole="Basket" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Product_Basket_Product" FromRole="Product_Basket" ToRole="Product" />
         </EntityType>
@@ -374,7 +374,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="pr8_muraEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="pr8_muraEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Basket" EntityType="Self.Basket" />
           <EntitySet Name="Delivery" EntityType="Self.Delivery" />
           <EntitySet Name="Delivery_Product" EntityType="Self.Delivery_Product" />
@@ -417,7 +417,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище pr8_muraModelContainer" CdmEntityContainer="pr8_muraEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище pr8_muraModelContainer" CdmEntityContainer="pr8_muraEntities1">
           <EntitySetMapping Name="Basket">
             <EntityTypeMapping TypeName="pr8_muraModel.Basket">
               <MappingFragment StoreEntitySet="Basket">

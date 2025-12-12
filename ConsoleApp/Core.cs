@@ -8,6 +8,6 @@ namespace ConsoleApp
 {
     internal class Core
     {
-        public static pr8_muraEntities Context = new pr8_muraEntities();
+        public static pr8_muraEntities1 Context = new pr8_muraEntities1();
     }
 }

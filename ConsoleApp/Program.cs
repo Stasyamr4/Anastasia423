@@ -200,7 +200,7 @@ namespace ConsoleApp
                                                 {
                                                     if (user != null)
                                                     {
-                                                        //AddProductInBasket(user.ID, IdProd.ID);
+                                                        AddProductInBasket(user.id, IdProd.id);
                                                     }
                                                     else
                                                     {
@@ -236,10 +236,7 @@ namespace ConsoleApp
                         break;
                     }
                 }
-                else
-                {
-                    //AddProducts();
-                }
+                
 
             }
         }
@@ -252,6 +249,74 @@ namespace ConsoleApp
         //выводим полную информацию о товаре
         //выбор между добавлением в корзину и вернуться в меню и купить товар
         //}
+
+        static public void AddProductInBasket(int UsID, int IdProd)
+        {
+            Console.WriteLine("Введите количество товара, который хотите добавить в корзину");
+            if (int.TryParse(Console.ReadLine(), out int countProd) && countProd > 0)
+            {
+                try
+                {
+                    // Проверяем существование товара
+                    var product = Core.Context.Product.FirstOrDefault(p => p.id == IdProd);
+                    if (product == null)
+                    {
+                        Console.WriteLine("Товар не найден!");
+                        return;
+                    }
+
+                    // Ищем корзину пользователя
+                    var userBasket = Core.Context.Basket.FirstOrDefault(b => b.user_id == UsID);
+
+                    if (userBasket == null)
+                    {
+                        // Создаем новую корзину
+                        userBasket = new Basket { user_id = UsID };
+                        Core.Context.Basket.Add(userBasket);
+                        Core.Context.SaveChanges();
+                        Console.WriteLine("Создана новая корзина");
+                    }
+
+                    // Проверяем, есть ли уже этот товар в корзине
+                    var existingProduct = Core.Context.Product_Basket
+                        .FirstOrDefault(pb => pb.basket_id == userBasket.id && pb.product_id == IdProd);
+
+                    if (existingProduct != null)
+                    {
+                        // Если товар уже есть, обновляем количество
+                        existingProduct.count += countProd;
+                        Console.WriteLine($"Количество товара обновлено: {existingProduct.count}");
+                    }
+                    else
+                    {
+                        // Добавляем новый товар в корзину
+                        var productBasket = new Product_Basket
+                        {
+                            basket_id = userBasket.id,
+                            product_id = IdProd,
+                            count = countProd
+                        };
+                        Core.Context.Product_Basket.Add(productBasket);
+                        Console.WriteLine("Товар добавлен в корзину");
+                    }
+
+                    // Сохраняем изменения
+                    Core.Context.SaveChanges();
+                    Console.WriteLine("Изменения сохранены!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при добавлении товара: {ex.Message}");
+                    // Для отладки можно вывести внутреннее исключение
+                    if (ex.InnerException != null)
+                        Console.WriteLine($"Внутренняя ошибка: {ex.InnerException.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Введите корректное количество!");
+            }
+        }
 
         //функция для добавления товара в коризу(Товары товар)
 

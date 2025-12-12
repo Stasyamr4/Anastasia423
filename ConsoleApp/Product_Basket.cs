@@ -16,7 +16,7 @@ namespace ConsoleApp
     {
         public int product_id { get; set; }
         public int basket_id { get; set; }
-        public string count { get; set; }
+        public Nullable<int> count { get; set; }
     
         public virtual Basket Basket { get; set; }
         public virtual Product Product { get; set; }
