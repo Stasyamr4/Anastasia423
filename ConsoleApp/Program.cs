@@ -35,7 +35,7 @@ namespace ConsoleApp
                             break;
                         case 3:
                             Console.Clear();
-                            //Catalogue();
+                            Catalogue();
                             break;
                         case 0:
                             ShowMenu = false;
@@ -152,44 +152,106 @@ namespace ConsoleApp
 
         public static void Catalogue()
         {
-            var tovari = Core.Context.Product.ToList();
-            foreach (var item in tovari) 
+            List<Product> products = Core.Context.Product.ToList();
+            bool ShowCatalogue = true;
+            while (ShowCatalogue)
             {
-                Console.WriteLine($"id: {item.id}, Название товара: {item.name}, Цена: {item.price}");
-                bool flag = true;
-                while (flag)
+                if (Core.Context.Product.Any())
                 {
-                    Console.WriteLine("Хотите посмотреть подробную информацию о товаре? (да/нет)");
-                    string vvod = Console.ReadLine().ToLower();
-                    switch (vvod)
+                    Console.WriteLine("====== КАТАЛОГ ТОВАРОВ ======");
+                    foreach (var prod in products)
                     {
-                        case "да":
-                            Console.WriteLine("Введите id товара");
-                            if (int.TryParse(Console.ReadLine(), out int IDtov))
-                            {
-                                //посмотреть такой товар в списке по ID и вывести подробную инф о нем
-                                flag = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Введите число!");
-                            }
-                            break;
-                        case "нет":
-                            flag = false;
-                            break;
+                        Console.WriteLine($"ID: {prod.id}, название: {prod.name}, цена: {prod.price}");
+                    }
+                    Console.WriteLine();
+
+                    Console.WriteLine("Хотите посмотреть конкретный товар? (Да/нет)");
+                    string choice = Console.ReadLine().ToLower();
+                    bool ChoiceProd = true;
+                    while (ChoiceProd)
+                    {
+                        switch (choice.ToLower())
+                        {
+                            case "да":
+                                Console.WriteLine("Введите ID товара: ");
+                                if (int.TryParse(Console.ReadLine(), out int id))
+                                {
+                                    var IdProd = Core.Context.Product.FirstOrDefault(prod => prod.id == id);
+                                    if (IdProd != null)
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"ID: {IdProd.id}, название: {IdProd.name}, цена: {IdProd.price}");
+                                        Console.WriteLine("Желаете продолжить? (Да/нет)");
+                                        string answer = Console.ReadLine();
+                                        switch (answer.ToLower())
+                                        {
+                                            case "да":
+                                                Console.Clear();
+                                                Console.WriteLine("Выберите пункт меню:\n" +
+                                            "1. Добавить товар в корзину\n" +
+                                            "2. Посмотреть каталог");
+                                                string vibor = Console.ReadLine();
+                                                if (vibor == "2")
+                                                {
+                                                    Catalogue();
+                                                    ChoiceProd = false;
+                                                }
+                                                if (vibor == "1")
+                                                {
+                                                    if (user != null)
+                                                    {
+                                                        //AddProductInBasket(user.ID, IdProd.ID);
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine("Необходимо войти в аккаунт!");
+                                                        SignIn();
+                                                    }
+                                                }
+                                                break;
+                                            case "нет":
+                                                Console.Clear();
+                                                ShowCatalogue = false;
+                                                ChoiceProd = false;
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Товар с таким ID не найден");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Введите корректный ID!");
+                                }
+                                break;
+                            case "нет":
+                                Console.Clear();
+                                ChoiceProd = false;
+                                ShowCatalogue = false;
+                                ShowMenu();
+                                    break;
+                        }
+                        break;
                     }
                 }
+                else
+                {
+                    //AddProducts();
+                }
+
             }
         }
-                //каталог товаров 
-                //{
-                //вывести данные из таблице товров бд
-                //выбрать конкретный товар(айди)
-                //очищение консоли
-                //выводим полную информацию о товаре
-                //выбор между добавлением в корзину и вернуться в меню и купить товар
-                //}
+
+        //каталог товаров 
+        //{
+        //вывести данные из таблице товров бд
+        //выбрать конкретный товар(айди)
+        //очищение консоли
+        //выводим полную информацию о товаре
+        //выбор между добавлением в корзину и вернуться в меню и купить товар
+        //}
 
         //функция для добавления товара в коризу(Товары товар)
 
@@ -200,7 +262,7 @@ namespace ConsoleApp
         //}
 
         //фунция для оформления заказа
-            }
     }
+}
         
 
