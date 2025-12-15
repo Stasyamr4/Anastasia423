@@ -21,6 +21,8 @@ namespace ConsoleApp
                 Console.WriteLine("1. Регистрация");
                 Console.WriteLine("2. Войти в аккаунт");
                 Console.WriteLine("3. Каталог товаров");
+                Console.WriteLine("4. Корзина товаров");
+                Console.WriteLine("5. Заказ из корзины");
                 Console.WriteLine("0. Выход");
                 if (int.TryParse(Console.ReadLine(), out int choice))
                     switch (choice)
@@ -36,6 +38,14 @@ namespace ConsoleApp
                         case 3:
                             Console.Clear();
                             Catalogue();
+                            break;
+                        case 4:
+                            Console.Clear();
+                            ShowBasket();
+                            break;
+                        case 5:
+                            Console.Clear();
+                            OrderFromBasket();
                             break;
                         case 0:
                             ShowMenu = false;
@@ -189,7 +199,9 @@ namespace ConsoleApp
                                                 Console.Clear();
                                                 Console.WriteLine("Выберите пункт меню:\n" +
                                             "1. Добавить товар в корзину\n" +
-                                            "2. Посмотреть каталог");
+                                            "2. Посмотреть каталог\n" +
+                                            "3. Посмотреть корзину");
+
                                                 string vibor = Console.ReadLine();
                                                 if (vibor == "2")
                                                 {
@@ -207,6 +219,7 @@ namespace ConsoleApp
                                                         Console.WriteLine("Необходимо войти в аккаунт!");
                                                         SignIn();
                                                     }
+
                                                 }
                                                 break;
                                             case "нет":
@@ -231,12 +244,12 @@ namespace ConsoleApp
                                 ChoiceProd = false;
                                 ShowCatalogue = false;
                                 ShowMenu();
-                                    break;
+                                break;
                         }
                         break;
                     }
                 }
-                
+
 
             }
         }
@@ -319,14 +332,189 @@ namespace ConsoleApp
         }
 
         //функция для добавления товара в коризу(Товары товар)
+        public static void ShowBasket()
+        {
+            if (user != null)
+            {
+                if (Core.Context.Product_Basket != null)
+                {
+                    var idbasketUser = Core.Context.Basket.Where(usID => usID.user_id == user.id).FirstOrDefault();
+                    var basketUser = Core.Context.Product_Basket.Where(idBasket => idBasket.basket_id == idbasketUser.id).ToList();
+                    decimal summa = 0;
+                    foreach (var product in basketUser)
+                    {
+                        var prods = Core.Context.Product.Where(prodID => product.product_id == prodID.id).ToList(); ;
+                        foreach (var prod in prods)
+                        {
+                            decimal price = 0;
+                            Console.WriteLine($"ID: {prod.id}, название: {prod.name}, цена: {prod.price}, количество: {product.count}, стоимость: {prod.price * product.count} руб.");
+                            summa += price;
+                        }
+                    }
+                    Console.WriteLine($"Итоговая стоимость корзины: {summa}");
+                }
+                else
+                {
+                    Console.WriteLine("Корзина пустая! Добавьте товары!");
+                    Catalogue();
+                }
+            }
 
+            else
+            {
+                Console.WriteLine("Войдите в аккаунт!");
+                SignIn();
+            }
+        }
+        //просмотр корзины()
         //функция для показа корзины
         //Проверка
         //{
         //если пользователь вошел, то показываем корзину
         //}
+        static public void OrderFromBasket()
+        {
+            if (user != null)
+            {
+                // Получаем товары в корзине текущего пользователя
+                var userBasket = Core.Context.Basket
+                .Where(b => b.user_id == user.id)
+                .FirstOrDefault();
 
-        //фунция для оформления заказа
+                if (userBasket == null)
+                {
+                    Console.WriteLine("Корзина пуста!");
+                    return;
+                }
+
+                // Получаем товары в корзине пользователя
+                var productsInBasket = Core.Context.Product_Basket
+                .Where(pb => pb.basket_id == userBasket.id)
+                .ToList();
+
+                if (!productsInBasket.Any())
+                {
+                    Console.WriteLine("В корзине нет товаров!");
+                    return;
+                }
+
+                var PVZ = Core.Context.PVZ.ToList();
+                Console.WriteLine("Заказ товаров");
+
+                bool zakaz = true;
+                while (zakaz)
+                {
+                    Console.WriteLine("Желаете заказать все товары из корзины? (да/нет)");
+                    string choice = Console.ReadLine().ToLower();
+
+                    switch (choice)
+                    {
+                        case "да":
+                            Console.WriteLine("Список товаров в корзине:");
+                            foreach (var item in productsInBasket)
+                            {
+                                var product = Core.Context.Product
+                                .FirstOrDefault(p => p.id == item.product_id);
+                                if (product != null)
+                                {
+                                    Console.WriteLine($"- {product.name}: {product.price} руб.");
+                                }
+                            }
+
+                            Console.WriteLine("\nВыберите id ПВЗ:");
+                            foreach (var pvz in PVZ)
+                            {
+                                Console.WriteLine($"id: {pvz.id}, Адрес: {pvz.address}");
+                            }
+
+                            if (!int.TryParse(Console.ReadLine(), out int IDpvz) ||
+                            !PVZ.Any(p => p.id == IDpvz))
+                            {
+                                Console.WriteLine("Неверный ID ПВЗ!");
+                                continue;
+                            }
+
+                            try
+                            {
+                             
+                                var delivery = new Delivery
+                                {
+                                    pvz_id = IDpvz,
+                                    date_order = DateTime.Now,
+                                    user_id = user.id
+                                };
+                                Core.Context.Delivery.Add(delivery);
+                                Core.Context.SaveChanges();
+
+                                
+                                foreach (var basketItem in productsInBasket)
+                                {
+                                    var deliveryProductItem = new Delivery_Product
+                                    {
+                                        product_id = basketItem.product_id,
+                                        delivery_id = delivery.id,
+                                        
+                                    };
+                                    Core.Context.Delivery_Product.Add(deliveryProductItem);
+                                }
+                                Core.Context.SaveChanges();
+
+                          
+                                Core.Context.Product_Basket.RemoveRange(productsInBasket);
+                                Core.Context.SaveChanges();
+
+                                Console.WriteLine("Заказ успешно оформлен!");
+                                zakaz = false;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Ошибка при оформлении заказа: {ex.Message}");
+                            }
+                            break;
+
+                        case "нет":
+                            
+                            Console.WriteLine("Функция выбора отдельных товаров пока не реализована.");
+                            Console.WriteLine("Хотите продолжить оформление заказа? (да/нет)");
+                            string continueChoice = Console.ReadLine().ToLower();
+                            if (continueChoice == "нет")
+                            {
+                                zakaz = false;
+                            }
+                            break;
+
+                        default:
+                            Console.WriteLine("Пожалуйста, введите 'да' или 'нет'.");
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Пользователь не авторизован!");
+            }
+        }
+
+        public static void ShowHistory()
+        {
+            if (user != null)
+            {
+                var Hist = Core.Context.Delivery.Where(us => us.id == user.id).ToList();
+                if (Hist != null)
+                {
+                    foreach (var ord in Hist)
+                    {
+                        var deliveriesWithPVZName = Core.Context.Delivery.Select(p => p.pvz_id);
+                        Console.WriteLine($"id: {ord.id}, pvz: {ord.pvz_id}, date: {ord.date_order},  ");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Истории покупок еще нет.");
+                }
+            }
+            // Просмотр истории покупок()
+        }
     }
 }
         
